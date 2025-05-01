@@ -154,7 +154,7 @@ class: text-left
 transition: slide-left
 ---
 
-# Group Exercises: Make rest of CRUD functionality
+# Exercise:
 
 <!--
 -->
