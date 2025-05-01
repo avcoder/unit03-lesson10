@@ -412,7 +412,12 @@ transition: slide-left
     });
    ```
 - What happens if you forget to call `next()` in middleware?
-- Can you use multiple middleware on a single route? 
+- DID YOU KNOW?  you use multiple middleware on a single route:
+   ```js
+   app.get("/todo/:id", myMiddleware, my2ndMiddleware, handler);
+   // or
+   app.get("/todo/:id", [myMiddleware, my2ndMiddleware], handler));
+   ```  
 
 Goto next slide...
 
