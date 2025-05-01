@@ -398,7 +398,21 @@ transition: slide-left
 
 # Exercise: Middleware
 
-
+1. Let's create a custom middleware that adds user info (or order info) to the request object
+   ```js
+    export const attachUser = (req, res, next) => {
+      req.user = { id: 1, name: "Demo User" };
+      next();
+    };
+   ```
+1. Now use it:
+   ```js
+    app.get("/me", attachUser, (req, res) => {
+      res.send(req.user);
+    });
+   ```
+- What happens if you forget to call `next()` in middleware?
+- Can you use multiple middleware on a single route? 
 
 ---
 transition: slide-left
