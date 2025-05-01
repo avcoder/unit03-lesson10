@@ -174,7 +174,7 @@ transition: slide-left
    - `.isURL()`	Checks if it's a valid URL
    - `.isJSON()`	Must be a valid JSON string
    - `.isBoolean()`	Accepts "true"/"false"
-- Advanced / Custom
+- Advanced / Other
    - `.custom(fn)`	Your own logic (throw error or return true)
    - `.optional()`	Skip validation if field not present
    - `.exists()` Checks that a value is present in the request
@@ -183,6 +183,123 @@ transition: slide-left
    - `.isStrongPassword([options])` Validates that a password is strong (uppercase, lowercase, number, symbol)
    - `.isDate()` Checks if the value is a valid date string.
    - `.isCreditCard()` Validates credit card number format.
+
+---
+transition: slide-left
+---
+
+# Synchronous Error Handling (pg.1)
+Let's explore how to handle errors in express
+
+1. First let's see how node handles synchronous errors
+   - Create new file `index2.js` where in Line 1 you say `throw new Error('oops')`
+   - run `node index2.js` - what happens?
+   - If you had written a Line 2 (ex: console.log('hi')) -- would that run?
+2. Now let's see how Express handles errors.  Try the following.  
+   ```js
+   app.get('/', (req, res) => {
+    throw new Error('hey')
+   })
+   ```
+   - Does an error show in the terminal?
+   - Did it show an error in the browser?
+   - Did the server crash or is still running?
+
+Goto next slide...
+
+---
+transition: slide-left
+---
+
+# Synchronous Error Handling (pg.2)
+
+1. Let's create an error handler then place it after your routes
+   ```js
+   app.use(err, req, res, next) => {
+    // Above Looks like regular middleware except Only difference is the first parameter
+    console.log(err);
+    res.json({ message: 'error occurred' })
+   }
+   ```
+   - Did it show an error in the browser? (compare from before)
+   - Does an error show in the terminal?
+   - Did the server crash or is still running?
+1. Error handlers are good place to put in:
+   - security and hiding stack traces
+   ```js
+   app.use((err, req, res, next) => {
+    res.status(500).json({ message: 'Internal Server Error' });
+   });
+   ```
+   - error logging
+   - Sentry metrics and Monitoring
+
+---
+transition: slide-left
+---
+
+# Asynchronous Error Handling (pg.1)
+
+1. Now let's see how it asynchronous errors
+   ```js
+   app.get('/', (req, res) => {
+     setTimeout(() => {
+        throw new Error('hey')
+     }, 1)
+   })
+   ```
+   - Did it show an error in the browser?
+   - Does an error show in the terminal?
+   - Did the server crash or is still running?
+
+---
+transition: slide-left
+---
+
+# Asynchronous Error Handling (pg.2)
+
+1. Let's create an error handler then place it after your routes
+   ```js
+   app.get('/', (req, res, next) => { // only difference here is the last parameter
+     setTimeout(() => {
+        next(new Error('hey')) 
+     }, 1)
+   })
+   ```
+   - if you call next using any value, it'll treat it like an error
+   - which will eventually be handled in your original error handler
+   - Did it show an error in the browser? (compare from before)
+   - Does an error show in the terminal?
+   - Did the server crash or is still running?
+
+---
+transition: slide-left
+---
+
+# Asynchronous Error Handling (pg.3)
+
+1. Practical example: use try/catch and next
+   ```js
+    router.get("/user/:id", async (req, res, next) => {
+      try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+          return res.status(404).send({ error: "User not found" });
+        }
+        res.send(user);
+      } catch (err) {
+        next(err); // pass the error to the middleware
+      }
+    });
+   ```
+
+---
+transition: slide-left
+---
+
+# Exercise: Implement Error Handling
+
+1. Using either our food truck app or your own personal app, implement error handling for all the places where synchronous/asynchronous errors could occur
 
 ---
 layout: image-right
