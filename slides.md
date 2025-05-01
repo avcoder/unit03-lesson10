@@ -16,7 +16,7 @@ transition: slide-left
 mdc: true
 ---
 
-# Express Validation, Error Handling, Middleware
+# Validation, Error Handling, Middleware
 Back-End Development - part 10/12
 - [ ] validate using `express-validator` package
 - [ ] Error Handling our routes
@@ -35,10 +35,140 @@ Back-End Development - part 10/12
 transition: slide-left
 ---
 
-# Recap
-(5 min)
+# Recap of Mongoose Validation (pg.1)
 
-- My Github repo for Foodtruck App backend code 
+1. Create a simple `User` model with validation rules:
+    ```js
+    import mongoose from "mongoose";
+
+    const userSchema = new mongoose.Schema({
+      username: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 15,
+      },
+      email: {
+        type: String,
+        required: true,
+        match: /^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/,
+      },
+      age: {
+        type: Number,
+        min: 13,
+        max: 120,
+      },
+    });
+
+    export const User = mongoose.model("User", userSchema);
+    ```
+
+---
+transition: slide-left
+---
+
+# Mongoose Validation (pg.2)
+
+1. In your Express route, handle validation errors:
+    ```js
+    app.post("/users", async (req, res) => {
+      try {
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).send(user);
+      } catch (err) {
+        if (err.name === "ValidationError") {
+          return res.status(400).send({ error: err.message });
+        }
+        res.status(500).send({ error: "Something went wrong" });
+      }
+    });
+    ```
+
+---
+transition: slide-left
+---
+
+# Express Validation (pg.1)
+
+1. Install and import express-validator: `npm install express-validator`
+    ```js
+    import express from "express";
+    import { body, validationResult } from "express-validator";
+
+    const router = express.Router();
+    ```
+
+1. Example `/register` route:
+    ```js
+    router.post(
+      "/register",
+      [
+        body("username").notEmpty().withMessage("Username is required"),
+        body("email").isEmail().withMessage("Must be a valid email"),
+        body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+      ],
+      (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+        res.send("User registered successfully!");
+      }
+    );
+    ```
+
+---
+transition: slide-left
+---
+
+# Express Validation (pg.2)
+
+1. **Fill in the blanks** – `/login` route:
+    ```js
+    router.post(
+      "/login",
+      [
+        body("email").isEmail().withMessage("Valid email required"),
+        body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+      ],
+      (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+        res.send("Login successful!");
+      }
+    );
+    ```
+
+---
+transition: slide-left
+---
+
+# Express Validation (pg.3)
+
+1. **Challenge** – `/products` route:
+    ```js
+    router.post(
+      "/products",
+      [
+        body("name").isLength({ min: 3 }).withMessage("Name must be at least 3 characters"),
+        body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
+        body("category")
+          .optional()
+          .isIn(["tech", "food", "clothing"])
+          .withMessage("Category must be tech, food, or clothing"),
+      ],
+      (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+        res.send("Product added!");
+      }
+    );
+    ```
 
 ---
 layout: image-right
@@ -73,14 +203,6 @@ transition: slide-left
 ---
 
 # Group Exercises: Make rest of CRUD functionality
-(remainder of time)  Take 10 mins to develop just one of the CRUD functionalities.  I'll take it up each 10 min interval.
-
-1. Implement the rest of the TODOs I listed in the comments (Cmd + Shift + F > search for 'todo').  (i.e. router, controller, handler ...) 
-   - delete (Exercise #1 - 10 mins)
-   - create / post (Exercise #2 - 10 mins)
-   - update / put  (Exercise #3 - 10 mins)
-   - Stretch goal : implement the search box to search by name or receipt id
-
 
 <!--
 -->
@@ -91,5 +213,4 @@ transition: slide-left
 
 # Homework
 
-- REMINDER: There is a lab tomorrow
 - Make a To-Do List App with MongoDB [see instructions in LMS](https://courses.circuitstream.com/d2l/le/lessons/9514/topics/49825)
