@@ -333,7 +333,19 @@ class: text-left
 transition: slide-left
 ---
 
-# Exercise:
+# Exercise: Middleware
+
+- Middleware is a list of functions to run right before your handlers do
+- Use cases: logging the request in terminal, handle errors, authentication, transform request object 
+- 3rd party middleware: `morgan`, `cors` `express.json()` `express.urlencoded()` `body-parser`
+
+1. Try installing, learning and playing with some other common middleware:
+   - helmet
+   - compression
+   - cookie-parser
+   - express-session
+   - rate-limit
+   - serve-static
 
 <!--
 -->
