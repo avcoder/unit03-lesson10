@@ -396,7 +396,7 @@ transition: slide-left
 transition: slide-left
 ---
 
-# Exercise: Middleware
+# Exercise: Middleware (pg.4)
 
 1. Let's create a custom middleware that adds user info (or order info) to the request object
    ```js
@@ -414,11 +414,13 @@ transition: slide-left
 - What happens if you forget to call `next()` in middleware?
 - Can you use multiple middleware on a single route? 
 
+Goto next slide...
+
 ---
 transition: slide-left
 ---
 
-# Exercise: Explore Middleware (pg.4)
+# Exercise: Explore Middleware (pg.5)
 
 1. Try installing, learning and playing with some other common middleware:
    - helmet
