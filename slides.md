@@ -95,9 +95,7 @@ transition: slide-left
     ```js
     import express from "express";
     import { body, validationResult } from "express-validator";
-
-    const router = express.Router();
-    ```
+      ```
 
 1. Example `/register` route:
     ```js
@@ -121,6 +119,64 @@ transition: slide-left
 ---
 transition: slide-left
 ---
+
+# Exercise: `express-validator` (pg.2)
+Experiment the various validator methods
+
+1. Use this base route to experiment with different validators:
+```js
+router.post("/test-inputs",
+  [
+    // Add different body() validators below
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    res.send("Validation passed!");
+  }
+);
+```
+
+Go to next slide to view validator methods
+
+---
+transition: slide-left
+---
+
+# Explore express-validator: Validator methods (pg.3)
+
+- General Validators: 
+   - `.notEmpty()`  field must not be empty
+   - `.isLength({ min, max })`  Check string length
+   - `.equals(value)`	Check if field matches a specific value
+- String & Email Validators
+   - `.isEmail()`	Validates email address
+   - `.isAlpha()`	Letters only
+   - `.isAlphanumeric()`	Letters and numbers
+   - `.isLowercase() / .isUppercase()`	All lowercase or uppercase
+- Number Validators
+   - `.isNumeric()`	Only numbers
+   - `.isInt({ min, max })`	Integer within a range
+   - `.isFloat({ gt, lt })`	Float range (greater than, less than)
+
+Goto next slide for more validators...
+
+---
+transition: slide-left
+---
+
+# Explore express-validator: Validator methods (pg.4)
+
+- URL / Data Validators
+   - `.isURL()`	Checks if it's a valid URL
+   - `.isJSON()`	Must be a valid JSON string
+   - `.isBoolean()`	Accepts "true"/"false"
+- Advanced / Custom
+   - `.custom(fn)`	Your own logic (throw error or return true)
+   - `.optional()`	Skip validation if field not present
 
 ---
 layout: image-right
