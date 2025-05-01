@@ -333,11 +333,78 @@ class: text-left
 transition: slide-left
 ---
 
-# Exercise: Middleware
+# Middleware (pg.1)
 
 - Middleware is a list of functions to run right before your handlers do
 - Use cases: logging the request in terminal, handle errors, authentication, transform request object 
 - 3rd party middleware: `morgan`, `cors` `express.json()` `express.urlencoded()` `body-parser`
+- Let's create our own custom middleware:
+   ```js
+    app.use((req, res, next) => {
+       console.log("Custom middleware ran");
+       next(); // important to pass control to the next middleware/route
+    }
+   ```
+   - place above middleware before it hits our routes
+   - run it. Are you able to see the log?
+
+
+---
+transition: slide-left
+---
+
+# Middleware (pg.2)
+
+1. Let's try modifying the request object in our middleware
+   ```js
+   app.use((req, res, next) => {
+      req.whatever = 'hi';
+      next()
+   })
+   ```
+
+1. Now in any route handler, you now should be able to see `req.whatever`
+   ```js
+    router.get('/order', (req, res) => {
+      res.json({ message: req.whatever })
+    })
+   ```
+- Exercise: Does this mean we can also modify the response object?  Try it.
+
+
+---
+transition: slide-left
+---
+
+# Middleware (pg.3)
+
+1. Let's create our own simple version of `morgan` middleware
+   ```js
+    export const logger = (req, res, next) => {
+      console.log(`[LOG] ${req.method} - ${req.url}`);
+      next();
+    };
+   ```
+   - Try importing your logger and replacing morgan with it 
+   ```js
+    import { logger } from "./logger.js";
+    app.use(logger);
+   ```
+   - Does it work? Does it log requests in the terminal?
+
+---
+transition: slide-left
+---
+
+# Exercise: Middleware
+
+
+
+---
+transition: slide-left
+---
+
+# Exercise: Explore Middleware (pg.4)
 
 1. Try installing, learning and playing with some other common middleware:
    - helmet
