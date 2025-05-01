@@ -177,6 +177,12 @@ transition: slide-left
 - Advanced / Custom
    - `.custom(fn)`	Your own logic (throw error or return true)
    - `.optional()`	Skip validation if field not present
+   - `.exists()` Checks that a value is present in the request
+   - `.isIn(array)` Validates that the value is in the provided array.
+      - ex: `body("role").isIn(["admin", "user", "guest"])`
+   - `.isStrongPassword([options])` Validates that a password is strong (uppercase, lowercase, number, symbol)
+   - `.isDate()` Checks if the value is a valid date string.
+   - `.isCreditCard()` Validates credit card number format.
 
 ---
 layout: image-right
