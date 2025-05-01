@@ -35,7 +35,16 @@ Back-End Development - part 10/12
 transition: slide-left
 ---
 
-# Recap of Mongoose Validation (pg.1)
+# Recap
+
+- [My Github Repo](https://github.com/avcoder/unit03-backend) of backend up to this point
+- if Zoom crashes goto: https://meet.google.com/xzx-rria-pvs
+
+---
+transition: slide-left
+---
+
+# Mongoose Validation (pg.1)
 
 1. Create a simple `User` model with validation rules:
     ```js
